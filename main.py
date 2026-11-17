@@ -19,7 +19,15 @@ questions = [
     "10 - 4는 얼마일까요?"
 ]
 answers = [2, 5, 2, 8, 6]
-
+try:
+    with open("questions.txt", "r") as file:
+        lines = file.readlines() # questions.txt 파일내용을 한줄씩 나눠서, lines 리스트에 저장
+        for i in range(0, len(lines), 2): # 0부터 lines 리스트의 길이까지 2씩 증가하며 반복
+            questions.append(lines[i].strip())    
+            answers.append(int(lines[i + 1].strip()))
+except FileNotFoundError: # questions.txt 파일이 없으면
+    pass # 아무것도 하지 않음
+         
 while True : # 참인동안 반복
     print("1. 퀴즈 풀기")
     print("2. 문제 추가하기")
@@ -69,9 +77,19 @@ while True : # 참인동안 반복
         print("새로운 문제를 추가합니다.")
         new_question = input("추가할 문제를 입력하세요: ")
         questions.append(new_question) #questions 리스트에 append() 함수를 실행해. 이때 넘겨줄 값은 new_question(변수)로, 사용자가 입력한 새로운 문제를 questions 리스트에 추가
-        new_answer = int(input("새로운 문제의 정답을 입력하세요: "))
+        try:
+            new_answer = int(input("새로운 문제의 정답을 입력하세요: "))
+        except ValueError:
+            print("정수를 입력해주세요.")
+            continue
         answers.append(new_answer)
         print("문제가 추가 되었습니다!")
+        try:
+            with open("questions.txt", "a") as file:
+                file.write(new_question + "\n") # file에 new_question을 문자열로 변환하여 저장
+                file.write(str(new_answer) + "\n")
+        except FileNotFoundError:
+                    pass
 
     
     elif menu_choice == "3":
