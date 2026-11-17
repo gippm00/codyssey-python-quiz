@@ -1,4 +1,5 @@
 import json
+import shutil
 from pathlib import Path
 
 
@@ -41,6 +42,7 @@ class QuizGame:
     """퀴즈 목록, 게임 진행, 파일 저장을 관리하는 클래스입니다."""
 
     STATE_FILE = Path(__file__).resolve().parent / "state.json"
+    BACKUP_FILE = Path(__file__).resolve().parent / "state.json.bak"
 
     def __init__(self):
         self.quizzes = self.default_quizzes()
@@ -82,8 +84,11 @@ class QuizGame:
             "best_score": self.best_score,
         }
         try:
+            if self.STATE_FILE.exists():
+                shutil.copyfile(self.STATE_FILE, self.BACKUP_FILE)
             with self.STATE_FILE.open("w", encoding="utf-8") as file:
                 json.dump(data, file, ensure_ascii=False, indent=2)
+            print(f"저장 완료: {self.STATE_FILE.name}")
         except OSError:
             print("state.json을 저장하지 못했습니다.")
 

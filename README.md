@@ -25,6 +25,7 @@ python main.py
 - 최고 점수 확인 및 갱신
 - 퀴즈와 최고 점수의 JSON 파일 저장
 - 잘못된 숫자, 빈 입력, 파일 오류 처리
+- 저장 전 `state.json.bak` 자동 백업
 
 ## 파일 구조
 
@@ -33,6 +34,8 @@ codyssey-python-quiz/
 ├── main.py       # Quiz와 QuizGame 클래스 및 실행 코드
 ├── state.json    # 퀴즈 목록과 최고 점수 저장 파일
 ├── README.md     # 프로젝트 설명서
+├── docs/         # 실행 검증과 Git 실습 기록
+├── tests/        # 입력 및 퀴즈 단위 테스트
 └── .gitignore    # Git에서 제외할 파일 목록
 ```
 
@@ -55,10 +58,27 @@ codyssey-python-quiz/
 
 파일이 없으면 기본 퀴즈로 시작하고, 파일이 손상되었으면 안내 메시지를 출력한 뒤 기본 데이터로 복구합니다.
 
+데이터를 저장할 때 기존 `state.json`은 `state.json.bak`으로 백업합니다. 저장 중 문제가 생기거나 이전 데이터가 필요하면 이 백업 파일을 사용해 복구할 수 있습니다. 데이터가 매우 커지면 전체 파일을 다시 저장해야 하므로 성능과 메모리 사용량이 증가할 수 있으며, 그런 경우에는 SQLite 같은 데이터베이스를 고려할 수 있습니다.
+
 ## 클래스 구조
 
 - `Quiz`: 문제, 선택지, 정답을 보관하고 퀴즈를 출력하며 정답을 확인합니다.
 - `QuizGame`: 메뉴, 게임 진행, 문제 추가, 목록 출력, 최고 점수, JSON 저장·불러오기를 관리합니다.
+
+`Quiz`는 퀴즈 하나의 상태를 관리하고, `QuizGame`은 여러 퀴즈와 게임 흐름을 관리합니다. 클래스 기반 설계는 각 객체의 상태를 한 곳에서 관리하고, 기능을 메서드 단위로 재사용할 수 있다는 장점이 있습니다.
+
+## 변경 시 참고할 메서드
+
+- 문제 형식을 바꿀 때: `Quiz.__init__`, `Quiz.show`, `Quiz.from_dict`, `Quiz.to_dict`
+- 입력 검증을 바꿀 때: `QuizGame.read_text`, `QuizGame.read_int`
+- 저장 형식을 바꿀 때: `QuizGame.load_state`, `QuizGame.save_state`
+- 메뉴 기능을 바꿀 때: `QuizGame.show_menu`, `QuizGame.run`
+
+실행 검증과 Git 기록은 [`docs/verification.md`](docs/verification.md)에서 확인할 수 있으며, 자동 테스트는 다음 명령으로 실행합니다.
+
+```bash
+python -m unittest discover -s tests -v
+```
 
 ## 학습한 내용
 
