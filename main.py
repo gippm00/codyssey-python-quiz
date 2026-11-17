@@ -5,7 +5,12 @@ print("====== 퀴즈 게임 메뉴 ======")
 
 score = 0
 wrong_count = 0
-
+high_score = 0
+try:
+    with open("high_score.txt", "r") as file:
+        high_score = int(file.read()) # high_score.txt 파일을 읽어와서 정수로 변환하여 high_score 변수에 저장
+except FileNotFoundError: # high_score.txt 파일이 없으면
+    high_score = 0 # high_score 변수에 0을 저장
 questions = [
     "1 + 1은 얼마일까요?",
     "3 + 2는 얼마일까요?",
@@ -16,7 +21,6 @@ questions = [
 answers = [2, 5, 2, 8, 6]
 
 while True : # 참인동안 반복
-    print("====== 퀴즈 게임 메뉴 ======")   
     print("1. 퀴즈 풀기")
     print("2. 문제 추가하기")
     print("3. 문제 목록 보기")
@@ -45,6 +49,12 @@ while True : # 참인동안 반복
                 print("오답입니다!")
                 wrong_count += 1
         print("최종 점수:", score)
+        if score > high_score:
+            high_score = score
+            with open("high_score.txt", "w") as file:
+                file.write(str(high_score)) # file에 high_score를 문자열로 변환하여 저장
+
+    
         print("틀린 문제 수:", wrong_count)
         total_questions = len(questions)
         accuracy = score / total_questions * 100
@@ -68,7 +78,10 @@ while True : # 참인동안 반복
         print("문제 목록을 보여드립니다.")
         for number, question in enumerate(questions, start=1):#enumerate() 함수를 사용하여 questions 리스트의 각 문제와 그에 해당하는 번호를 가져옴. start=1로 설정하여 번호가 1부터 시작하도록 함
             print(number, ".", question) # 번호, 점, 문제 내용 출력
-            
+
+    elif menu_choice == "4":
+        print("최고 점수:", high_score)
+
     elif menu_choice == "5": # 앞의 조건들이 아니고, 사용자가 5번 메뉴를 선택하면
         print("퀴즈 게임을 종료합니다.")
         break # 반복문 종료
