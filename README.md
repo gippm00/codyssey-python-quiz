@@ -1,2 +1,15 @@
 # codyssey-python-quiz
-Python console quiz game projec
+
+Python으로 만든 콘솔 기반 퀴즈 게임입니다.
+
+## 주요 기능
+- 퀴즈 문제 풀이 및 정답 채점
+- 새로운 퀴즈 문제 추가 및 파일 저장
+- 최고 점수 확인 및 파일 저장
+- 등록된 퀴즈 문제 목록 확인
+
+## 실행 방법
+1. 컴퓨터에 Python 3을 설치합니다.
+
+
+
